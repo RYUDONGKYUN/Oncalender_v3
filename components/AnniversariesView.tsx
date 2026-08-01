@@ -196,11 +196,11 @@ export default function AnniversariesView() {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      '생일': 'bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-100',
-      '결혼기념일': 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-100',
-      '기일': 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100',
-      '시험일': 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-100',
-      '기타': 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100',
+      '생일': 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
+      '결혼기념일': 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
+      '기일': 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
+      '시험일': 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
+      '기타': 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100',
     };
     return colors[category] || colors['기타'];
   };
@@ -217,15 +217,15 @@ export default function AnniversariesView() {
   };
 
   return (
-    <div className="p-4 pb-32 space-y-6 bg-white dark:bg-slate-900 min-h-screen">
+    <div className="p-4 pb-32 space-y-6 bg-white dark:bg-black min-h-screen">
       {/* Error/Success Messages */}
       {error && (
-        <div className="bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200 p-4 rounded-lg border border-red-300 dark:border-red-700">
+        <div className="bg-red-50 dark:bg-red-950 text-red-900 dark:text-red-200 p-4 rounded-lg border border-red-300 dark:border-red-700">
           ⚠️ {error}
         </div>
       )}
       {success && (
-        <div className="bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-200 p-4 rounded-lg border border-green-300 dark:border-green-700">
+        <div className="bg-green-50 dark:bg-green-950 text-green-900 dark:text-green-200 p-4 rounded-lg border border-green-300 dark:border-green-700">
           ✓ {success}
         </div>
       )}
@@ -233,10 +233,10 @@ export default function AnniversariesView() {
       {/* Loading Skeleton */}
       {loading && !anniversaries.length && !summary.length && (
         <div className="space-y-4">
-          <div className="h-12 bg-slate-200 dark:bg-slate-700 rounded-lg animate-pulse" />
+          <div className="h-12 bg-gray-300 dark:bg-gray-700 rounded-lg animate-pulse" />
           <div className="space-y-3">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-20 bg-slate-200 dark:bg-slate-700 rounded-lg animate-pulse" />
+              <div key={i} className="h-20 bg-gray-300 dark:bg-gray-700 rounded-lg animate-pulse" />
             ))}
           </div>
         </div>
@@ -249,7 +249,7 @@ export default function AnniversariesView() {
             resetForm();
             setShowForm(true);
           }}
-          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 dark:from-blue-600 dark:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-lg shadow-lg transition-all active:scale-95"
+          className="w-full bg-black hover:bg-gray-900 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-black font-semibold py-3 px-4 rounded-lg shadow-lg transition-all active:scale-95"
         >
           ➕ 기념일 추가하기
         </button>
@@ -257,14 +257,14 @@ export default function AnniversariesView() {
 
       {/* Add/Edit Form */}
       {showForm && (
-        <div className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-lg border-2 border-blue-400 dark:border-blue-600">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
+        <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-lg border-2 border-gray-400 dark:border-gray-600">
+          <h3 className="text-lg font-bold text-black dark:text-white mb-4">
             {editingId ? '기념일 수정' : '새로운 기념일 추가'}
           </h3>
           <form onSubmit={handleAddAnniversary} className="space-y-4">
             {/* Title */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-1">
                 제목 *
               </label>
               <input
@@ -272,13 +272,13 @@ export default function AnniversariesView() {
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="예: 엄마 생신"
-                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                className="w-full px-3 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-700 dark:focus:ring-gray-300"
               />
             </div>
 
             {/* Category */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
                 카테고리 *
               </label>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -289,8 +289,8 @@ export default function AnniversariesView() {
                     onClick={() => setFormData({ ...formData, category: cat })}
                     className={`py-2 px-3 rounded-lg font-medium text-sm transition-all ${
                       formData.category === cat
-                        ? `${getCategoryColor(cat)} ring-2 ring-offset-2 dark:ring-offset-slate-800`
-                        : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                        ? 'bg-black dark:bg-white text-white dark:text-black ring-2 ring-offset-2 dark:ring-offset-gray-900'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
                     }`}
                   >
                     {getCategoryLabel(cat)} {cat}
@@ -302,13 +302,13 @@ export default function AnniversariesView() {
             {/* Date */}
             <div className="grid grid-cols-3 gap-2">
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-1">
                   월 *
                 </label>
                 <select
                   value={formData.month}
                   onChange={(e) => setFormData({ ...formData, month: e.target.value })}
-                  className="w-full px-2 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                  className="w-full px-2 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 dark:focus:ring-gray-300"
                 >
                   {[...Array(12)].map((_, i) => (
                     <option key={i + 1} value={i + 1}>
@@ -318,13 +318,13 @@ export default function AnniversariesView() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-1">
                   일 *
                 </label>
                 <select
                   value={formData.day}
                   onChange={(e) => setFormData({ ...formData, day: e.target.value })}
-                  className="w-full px-2 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                  className="w-full px-2 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 dark:focus:ring-gray-300"
                 >
                   {[...Array(31)].map((_, i) => (
                     <option key={i + 1} value={i + 1}>
@@ -334,7 +334,7 @@ export default function AnniversariesView() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-1">
                   연도 *
                 </label>
                 <input
@@ -343,14 +343,14 @@ export default function AnniversariesView() {
                   onChange={(e) => setFormData({ ...formData, year: e.target.value })}
                   min="1900"
                   max="2024"
-                  className="w-full px-2 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                  className="w-full px-2 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 dark:focus:ring-gray-300"
                 />
               </div>
             </div>
 
             {/* Calendar Type */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
                 달력 유형 *
               </label>
               <div className="flex gap-4">
@@ -363,7 +363,7 @@ export default function AnniversariesView() {
                     onChange={(e) => setFormData({ ...formData, calendarType: e.target.value })}
                     className="mr-2 w-4 h-4"
                   />
-                  <span className="text-slate-700 dark:text-slate-300">양력 📅</span>
+                  <span className="text-gray-900 dark:text-gray-300">양력 📅</span>
                 </label>
                 <label className="flex items-center cursor-pointer">
                   <input
@@ -374,7 +374,7 @@ export default function AnniversariesView() {
                     onChange={(e) => setFormData({ ...formData, calendarType: e.target.value })}
                     className="mr-2 w-4 h-4"
                   />
-                  <span className="text-slate-700 dark:text-slate-300">음력 🌙</span>
+                  <span className="text-gray-900 dark:text-gray-300">음력 🌙</span>
                 </label>
               </div>
             </div>
@@ -383,7 +383,7 @@ export default function AnniversariesView() {
             <div className="flex gap-2 pt-4">
               <button
                 type="submit"
-                className="flex-1 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors active:scale-95"
+                className="flex-1 bg-black hover:bg-gray-900 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-black font-semibold py-2 px-4 rounded-lg transition-colors active:scale-95"
               >
                 {editingId ? '수정' : '추가'}
               </button>
@@ -393,7 +393,7 @@ export default function AnniversariesView() {
                   setShowForm(false);
                   resetForm();
                 }}
-                className="flex-1 bg-slate-300 dark:bg-slate-600 hover:bg-slate-400 dark:hover:bg-slate-500 text-slate-900 dark:text-white font-semibold py-2 px-4 rounded-lg transition-colors active:scale-95"
+                className="flex-1 bg-gray-400 dark:bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors active:scale-95"
               >
                 취소
               </button>
@@ -404,7 +404,7 @@ export default function AnniversariesView() {
 
       {/* Summary Section */}
       <div className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white">📅 다가오는 30일</h2>
+        <h2 className="text-lg font-bold text-black dark:text-white">📅 다가오는 30일</h2>
         {summary.length > 0 ? (
           <div className="space-y-2">
             {summary.map((ann) => {
@@ -417,8 +417,8 @@ export default function AnniversariesView() {
                   key={`${ann.id}-${ann.year}`}
                   className={`p-4 rounded-lg border-l-4 backdrop-blur-sm transition-all ${
                     ann.category === '기일'
-                      ? 'border-gray-400 bg-gray-50/50 dark:bg-gray-900/50'
-                      : 'border-blue-400 bg-blue-50/50 dark:bg-blue-900/20'
+                      ? 'border-gray-600 bg-gray-100/50 dark:bg-gray-800/50'
+                      : 'border-gray-400 bg-gray-50/50 dark:bg-gray-900/50'
                   }`}
                 >
                   <div className="flex items-start justify-between">
@@ -427,39 +427,39 @@ export default function AnniversariesView() {
                         <span className="text-lg">{getCategoryLabel(ann.category)}</span>
                         <span
                           className={`font-semibold ${
-                            ann.category === '기일' ? 'text-gray-700 dark:text-gray-300' : 'text-slate-900 dark:text-white'
+                            ann.category === '기일' ? 'text-gray-700 dark:text-gray-300' : 'text-black dark:text-white'
                           }`}
                         >
                           {ann.title}
                         </span>
                         {isToday && (
-                          <span className="text-xs bg-red-500 text-white px-2 py-0.5 rounded-full font-semibold">
+                          <span className="text-xs bg-black dark:bg-white text-white dark:text-black px-2 py-0.5 rounded-full font-semibold">
                             오늘
                           </span>
                         )}
                       </div>
-                      <div className="text-sm text-slate-600 dark:text-slate-400">
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
                         {ann.year}년 {targetDate.getMonth() + 1}월 {targetDate.getDate()}일 ({
                         ['일', '월', '화', '수', '목', '금', '토'][targetDate.getDay()]
                         }요일)
                       </div>
-                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                      <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                         {ann.age}세 / {ann.year - ann.originYear}주년
                       </div>
                     </div>
                     <div className="text-right">
                       {ann.dday === 0 ? (
-                        <span className="text-2xl font-bold text-red-500 animate-pulse">D-DAY</span>
+                        <span className="text-2xl font-bold text-black dark:text-white animate-pulse">D-DAY</span>
                       ) : ann.dday > 0 ? (
                         <span
                           className={`text-2xl font-bold ${
-                            isSoon ? 'text-red-500' : 'text-blue-600 dark:text-blue-400'
+                            isSoon ? 'text-black dark:text-white' : 'text-gray-700 dark:text-gray-300'
                           }`}
                         >
                           D-{ann.dday}
                         </span>
                       ) : (
-                        <span className="text-sm text-slate-500 dark:text-slate-400">D+{Math.abs(ann.dday)}</span>
+                        <span className="text-sm text-gray-500 dark:text-gray-500">D+{Math.abs(ann.dday)}</span>
                       )}
                     </div>
                   </div>
@@ -468,7 +468,7 @@ export default function AnniversariesView() {
             })}
           </div>
         ) : (
-          <div className="text-center py-8 text-slate-500 dark:text-slate-400">
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             다가오는 기념일이 없습니다
           </div>
         )}
@@ -476,38 +476,38 @@ export default function AnniversariesView() {
 
       {/* All Anniversaries Section */}
       <div className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white">📋 모든 기념일</h2>
+        <h2 className="text-lg font-bold text-black dark:text-white">📋 모든 기념일</h2>
         {anniversaries.length > 0 ? (
           <div className="space-y-2">
             {anniversaries.map((ann) => (
               <div
                 key={ann.id}
-                className="p-4 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow"
+                className="p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-300 dark:border-gray-700 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-lg">{getCategoryLabel(ann.category)}</span>
-                      <span className="font-semibold text-slate-900 dark:text-white">{ann.title}</span>
+                      <span className="font-semibold text-black dark:text-white">{ann.title}</span>
                       <span className={`text-xs px-2 py-0.5 rounded-full ${getCategoryColor(ann.category)}`}>
                         {ann.category}
                       </span>
                     </div>
-                    <div className="text-sm text-slate-600 dark:text-slate-400">
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
                       {ann.originYear}년 {ann.originMonth}월 {ann.originDay}일 ({ann.calendarType === 'solar' ? '양력' : '음력'})
                     </div>
                   </div>
                   <div className="flex gap-2">
                     <button
                       onClick={() => startEditAnniversary(ann)}
-                      className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded transition-colors"
+                      className="p-2 hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded transition-colors"
                       title="수정"
                     >
                       ✏️
                     </button>
                     <button
                       onClick={() => setDeleteConfirm({ id: ann.id, title: ann.title })}
-                      className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded transition-colors"
+                      className="p-2 hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded transition-colors"
                       title="삭제"
                     >
                       🗑️
@@ -518,7 +518,7 @@ export default function AnniversariesView() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-8 text-slate-500 dark:text-slate-400">
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             기념일을 추가해 보세요
           </div>
         )}
@@ -527,23 +527,23 @@ export default function AnniversariesView() {
       {/* Delete Confirmation Modal */}
       {deleteConfirm && (
         <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-2xl max-w-sm w-full">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">기념일 삭제</h3>
-            <p className="text-slate-600 dark:text-slate-400 mb-6">
+          <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-2xl max-w-sm w-full border border-gray-400 dark:border-gray-600">
+            <h3 className="text-lg font-bold text-black dark:text-white mb-2">기념일 삭제</h3>
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
               "
-              <span className="font-semibold text-slate-900 dark:text-white">{deleteConfirm.title}</span>"를 정말로 삭제하시겠습니까?
+              <span className="font-semibold text-black dark:text-white">{deleteConfirm.title}</span>"를 정말로 삭제하시겠습니까?
             </p>
-            <p className="text-sm text-slate-500 dark:text-slate-500 mb-6">이 작업은 되돌릴 수 없습니다.</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">이 작업은 되돌릴 수 없습니다.</p>
             <div className="flex gap-3">
               <button
                 onClick={() => setDeleteConfirm(null)}
-                className="flex-1 bg-slate-300 dark:bg-slate-600 hover:bg-slate-400 dark:hover:bg-slate-500 text-slate-900 dark:text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                className="flex-1 bg-gray-400 dark:bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
               >
                 취소
               </button>
               <button
                 onClick={() => handleDeleteAnniversary(deleteConfirm.id)}
-                className="flex-1 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors active:scale-95"
+                className="flex-1 bg-black hover:bg-gray-900 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-black font-semibold py-2 px-4 rounded-lg transition-colors active:scale-95"
               >
                 삭제
               </button>

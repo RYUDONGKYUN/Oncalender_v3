@@ -42,13 +42,13 @@ export default function CalendarView() {
   return (
     <div className="p-4 pb-32 space-y-4">
       {/* View controls */}
-      <div className="flex gap-2 bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm">
+      <div className="flex gap-2 bg-white dark:bg-gray-900 rounded-lg p-3 shadow-sm">
         <button
           onClick={() => setViewType('month')}
           className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
             viewType === 'month'
-              ? 'bg-blue-500 text-white'
-              : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+              ? 'bg-black dark:bg-white text-white dark:text-black'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
         >
           월
@@ -57,8 +57,8 @@ export default function CalendarView() {
           onClick={() => setViewType('week')}
           className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
             viewType === 'week'
-              ? 'bg-blue-500 text-white'
-              : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+              ? 'bg-black dark:bg-white text-white dark:text-black'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
         >
           주
@@ -67,8 +67,8 @@ export default function CalendarView() {
           onClick={() => setViewType('day')}
           className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
             viewType === 'day'
-              ? 'bg-blue-500 text-white'
-              : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+              ? 'bg-black dark:bg-white text-white dark:text-black'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
         >
           일
@@ -76,22 +76,22 @@ export default function CalendarView() {
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm">
+      <div className="flex items-center justify-between bg-white dark:bg-gray-900 rounded-lg p-3 shadow-sm">
         <button
           onClick={handlePrevious}
-          className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"
+          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
         >
           ← 이전
         </button>
         <button
           onClick={handleToday}
-          className="px-3 py-2 bg-blue-500 text-white rounded text-sm font-medium hover:bg-blue-600 transition-colors"
+          className="px-3 py-2 bg-black dark:bg-white text-white dark:text-black rounded text-sm font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors"
         >
           오늘
         </button>
         <button
           onClick={handleNext}
-          className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"
+          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
         >
           다음 →
         </button>
