@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  calendars               Calendar[]
+  anniversaries           Anniversary[]
+  googleCalendarCaches    GoogleCalendarCache[]
+  sessions                Session[]
+
+  @@map("users")
+}
+
+model Calendar {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  color     String   @default("#4285F4")
+  isDefault Boolean  @default(false)
+  source    String   @default("local") // 'local' | 'google'
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  events Event[]
+
+  @@index([userId])
+  @@map("calendars")
+}
+
+model Event {
+  id              String   @id @default(cuid())
+  calendarId      String
+  title           String
+  description     String?
+  location        String?
+  startAt         DateTime
+  endAt           DateTime
+  allDay          Boolean  @default(false)
+  recurrenceRule  String?
+  color           String?
+  reminders       Int[]    @default([])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  calendar Calendar @relation(fields: [calendarId], references: [id], onDelete: Cascade)
+
+  @@index([calendarId])
+  @@index([startAt, endAt])
+  @@map("events")
+}
+
+model Anniversary {
+  id              String   @id @default(cuid())
+  userId          String
+  title           String
+  category        String   @default("기타") // '생일', '결혼기념일', '기일', '기타'
+  originYear      Int
+  originMonth     Int
+  originDay       Int
+  calendarType    String   @default("solar") // 'solar', 'lunar'
+  isLeapMonth     Boolean  @default(false)
+  leapPolicy      String   @default("nearest_normal") // 'nearest_normal', 'exact_only'
+  repeatUntilYear Int      @default(2100)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user        User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  occurrences AnniversaryOccurrence[]
+
+  @@index([userId])
+  @@map("anniversaries")
+}
+
+model AnniversaryOccurrence {
+  id                 String   @id @default(cuid())
+  anniversaryId      String
+  year               Int
+  resolvedSolarDate  DateTime
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  anniversary Anniversary @relation(fields: [anniversaryId], references: [id], onDelete: Cascade)
+
+  @@unique([anniversaryId, year])
+  @@index([anniversaryId])
+  @@map("anniversary_occurrences")
+}
+
+model GoogleCalendarCache {
+  id               String   @id @default(cuid())
+  userId           String
+  googleCalendarId String
+  payload          Json
+  fetchedAt        DateTime @default(now())
+  ttl              Int      @default(900) // 15분
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("google_calendar_cache")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
