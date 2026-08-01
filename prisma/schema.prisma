@@ -20,6 +20,8 @@ model User {
   anniversaries           Anniversary[]
   googleCalendarCaches    GoogleCalendarCache[]
   sessions                Session[]
+  anniversaryNotifications AnniversaryNotification[] @relation("user_notifications")
+  notificationLogs        NotificationLog[] @relation("notification_logs")
 
   @@map("users")
 }
@@ -78,8 +80,9 @@ model Anniversary {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  user        User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  occurrences AnniversaryOccurrence[]
+  user                 User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  occurrences          AnniversaryOccurrence[]
+  notifications        AnniversaryNotification[]
 
   @@index([userId])
   @@map("anniversaries")
@@ -127,4 +130,42 @@ model Session {
 
   @@index([userId])
   @@map("sessions")
+}
+
+model AnniversaryNotification {
+  id              String   @id @default(cuid())
+  userId          String
+  anniversaryId   String
+  notifyBefore    Int      @default(1) // days before
+  enabled         Boolean  @default(true)
+  notificationType String  @default("push") // 'push', 'email', 'both'
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user        User        @relation("user_notifications", fields: [userId], references: [id], onDelete: Cascade)
+  anniversary Anniversary @relation(fields: [anniversaryId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, anniversaryId])
+  @@index([userId])
+  @@index([anniversaryId])
+  @@map("anniversary_notifications")
+}
+
+model NotificationLog {
+  id                 String   @id @default(cuid())
+  userId             String
+  anniversaryId      String
+  notificationDate   DateTime
+  title              String
+  message            String
+  type               String   @default("push")
+  read               Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  user User @relation("notification_logs", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([notificationDate])
+  @@map("notification_logs")
 }
