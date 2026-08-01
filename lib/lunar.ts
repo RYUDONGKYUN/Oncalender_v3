@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Lunar, Solar } from 'lunar-javascript';
 
 export function lunarToSolar(year: number, month: number, day: number, isLeapMonth: boolean = false) {

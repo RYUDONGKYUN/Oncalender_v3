@@ -20,6 +20,7 @@ interface SummaryAnniversary {
   year: number;
   dday: number;
   age: number;
+  originYear: number;
 }
 
 export default function AnniversariesView() {

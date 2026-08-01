@@ -1,6 +1,6 @@
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
-import { prisma } from './db';
+import { prisma } from './db.server';
 
 const CACHE_TTL = 15 * 60 * 1000; // 15 minutes
 
@@ -43,7 +43,7 @@ export async function getGoogleCalendarEvents(
 
     // Fetch from Google Calendar API
     const auth = await getGoogleCalendarAuth(accessToken);
-    const calendar = google.calendar({ version: 'v3', auth });
+    const calendar = google.calendar({ version: 'v3', auth } as any);
 
     const response = await calendar.events.list({
       calendarId,
@@ -82,7 +82,7 @@ export async function getGoogleCalendarEvents(
 export async function listGoogleCalendars(userId: string, accessToken: string) {
   try {
     const auth = await getGoogleCalendarAuth(accessToken);
-    const calendar = google.calendar({ version: 'v3', auth });
+    const calendar = google.calendar({ version: 'v3', auth } as any);
 
     const response = await calendar.calendarList.list();
     return response.data.items || [];

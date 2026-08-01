@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { prisma } from './db';
+import { prisma } from './db.server';
 
 export async function getUserFromRequest(req: NextRequest): Promise<string | null> {
   try {

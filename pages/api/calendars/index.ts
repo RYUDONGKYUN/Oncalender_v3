@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from '../../../lib/db';
+import { prisma } from '../../../lib/db.server';
 import { getUserFromRequest } from '../../../lib/auth';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

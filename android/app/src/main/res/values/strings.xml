@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">OnCalendar</string>
+    <string name="title_activity_main">OnCalendar</string>
+    <string name="package_name">com.ryudongkyun.oncalender</string>
+    <string name="custom_url_scheme">com.ryudongkyun.oncalender</string>
+</resources>
