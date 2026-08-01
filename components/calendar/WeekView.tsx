@@ -1,0 +1,118 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+
+interface WeekViewProps {
+  currentDate: Date;
+}
+
+export default function WeekView({ currentDate }: WeekViewProps) {
+  const [events, setEvents] = useState<any[]>([]);
+
+  const startOfWeek = new Date(currentDate);
+  startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [currentDate]);
+
+  const fetchEvents = async () => {
+    try {
+      const userId = localStorage.getItem('userId') || 'demo-user';
+      const response = await fetch(
+        `/api/events?start=${startOfWeek.toISOString()}&end=${endOfWeek.toISOString()}`,
+        {
+          headers: {
+            'x-user-id': userId,
+          },
+        }
+      );
+      if (response.ok) {
+        setEvents(await response.json());
+      }
+    } catch (error) {
+      console.error('Failed to fetch events:', error);
+    }
+  };
+
+  const weekDays = [];
+  for (let i = 0; i < 7; i++) {
+    const day = new Date(startOfWeek);
+    day.setDate(startOfWeek.getDate() + i);
+    weekDays.push(day);
+  }
+
+  const getEventsForDate = (date: Date) => {
+    return events.filter((event) => {
+      const eventDate = new Date(event.startAt);
+      return eventDate.toDateString() === date.toDateString();
+    });
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="text-center bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm">
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+          {startOfWeek.getMonth() + 1}월 {startOfWeek.getDate()}일 - {endOfWeek.getMonth() + 1}월 {endOfWeek.getDate()}일
+        </h2>
+      </div>
+
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden">
+        <div className="grid grid-cols-7 border-b border-slate-200 dark:border-slate-700">
+          {weekDays.map((day, idx) => {
+            const isToday = day.toDateString() === new Date().toDateString();
+            return (
+              <div
+                key={idx}
+                className={`p-3 text-center border-r border-slate-200 dark:border-slate-700 last:border-r-0 ${
+                  isToday ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                }`}
+              >
+                <div className="text-xs text-slate-600 dark:text-slate-400 font-medium">
+                  {['일', '월', '화', '수', '목', '금', '토'][day.getDay()]}
+                </div>
+                <div
+                  className={`text-lg font-bold mt-1 ${
+                    isToday ? 'text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-white'
+                  }`}
+                >
+                  {day.getDate()}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="grid grid-cols-7">
+          {weekDays.map((day, idx) => {
+            const dayEvents = getEventsForDate(day);
+            return (
+              <div
+                key={idx}
+                className="min-h-64 p-2 border-r border-slate-200 dark:border-slate-700 last:border-r-0 space-y-2"
+              >
+                {dayEvents.map((event) => (
+                  <div
+                    key={event.id}
+                    className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 p-2 rounded"
+                  >
+                    <div className="font-semibold truncate">{event.title}</div>
+                    <div className="text-xs opacity-75">
+                      {new Date(event.startAt).toLocaleTimeString('ko-KR', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
