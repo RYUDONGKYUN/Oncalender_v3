@@ -55,6 +55,7 @@ export default function AnniversariesView() {
     year: new Date().getFullYear().toString(),
     calendarType: 'solar',
     endDate: '',
+    useMaxDate: false,
   });
 
   useEffect(() => {
@@ -135,6 +136,7 @@ export default function AnniversariesView() {
       year: new Date().getFullYear().toString(),
       calendarType: 'solar',
       endDate: '',
+      useMaxDate: false,
     });
     setEditingId(null);
   };
@@ -162,6 +164,8 @@ export default function AnniversariesView() {
       const saved = localStorage.getItem('anniversaries_data');
       const anns: Anniversary[] = saved ? JSON.parse(saved) : [];
 
+      const finalEndDate = formData.useMaxDate ? '2100-12-31' : formData.endDate || undefined;
+
       if (editingId) {
         // 수정
         const index = anns.findIndex((a) => a.id === editingId);
@@ -174,7 +178,7 @@ export default function AnniversariesView() {
             originMonth: month,
             originDay: day,
             calendarType: formData.calendarType,
-            endDate: formData.endDate || undefined,
+            endDate: finalEndDate,
           };
         }
       } else {
@@ -187,7 +191,7 @@ export default function AnniversariesView() {
           originMonth: month,
           originDay: day,
           calendarType: formData.calendarType,
-          endDate: formData.endDate || undefined,
+          endDate: finalEndDate,
         });
       }
 
@@ -206,6 +210,7 @@ export default function AnniversariesView() {
   };
 
   const startEditAnniversary = (ann: Anniversary) => {
+    const useMaxDate = ann.endDate === '2100-12-31';
     setFormData({
       title: ann.title,
       category: ann.category,
@@ -214,6 +219,7 @@ export default function AnniversariesView() {
       year: ann.originYear.toString(),
       calendarType: ann.calendarType,
       endDate: ann.endDate || '',
+      useMaxDate,
     });
     setEditingId(ann.id);
     setShowForm(true);
@@ -427,14 +433,34 @@ export default function AnniversariesView() {
 
             {/* End Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-1">
-                언제까지 표시 (선택사항)
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300">
+                  언제까지 표시 (선택사항)
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.useMaxDate}
+                    onChange={(e) => {
+                      setFormData({
+                        ...formData,
+                        useMaxDate: e.target.checked,
+                        endDate: e.target.checked ? '2100-12-31' : '',
+                      });
+                    }}
+                    className="w-4 h-4 mr-2"
+                  />
+                  <span className="text-sm text-gray-900 dark:text-gray-300">최대치 (2100년)</span>
+                </label>
+              </div>
               <input
                 type="date"
                 value={formData.endDate}
-                onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 dark:focus:ring-gray-300"
+                onChange={(e) =>
+                  setFormData({ ...formData, endDate: e.target.value, useMaxDate: false })
+                }
+                disabled={formData.useMaxDate}
+                className="w-full px-3 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 dark:focus:ring-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                 이 날짜 이후로는 기념일이 표시되지 않습니다.
