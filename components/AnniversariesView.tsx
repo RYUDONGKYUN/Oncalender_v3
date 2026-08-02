@@ -10,6 +10,7 @@ interface Anniversary {
   originMonth: number;
   originDay: number;
   calendarType: string;
+  endDate?: string;
 }
 
 interface SummaryAnniversary {
@@ -21,6 +22,7 @@ interface SummaryAnniversary {
   dday: number;
   age: number;
   originYear: number;
+  endDate?: string;
 }
 
 const CATEGORIES = ['생일', '결혼기념일', '기일', '시험일', '기타'];
@@ -52,6 +54,7 @@ export default function AnniversariesView() {
     day: '1',
     year: new Date().getFullYear().toString(),
     calendarType: 'solar',
+    endDate: '',
   });
 
   useEffect(() => {
@@ -90,9 +93,21 @@ export default function AnniversariesView() {
           dday,
           age,
           originYear: ann.originYear,
+          endDate: ann.endDate,
         };
       })
-      .filter((s) => s.dday >= -365 && s.dday <= 30)
+      .filter((s) => {
+        const isWithinRange = s.dday >= -365 && s.dday <= 30;
+        if (!isWithinRange) return false;
+
+        // endDate가 설정된 경우, 오늘이 endDate 이전인지 확인
+        if (s.endDate) {
+          const endDate = new Date(s.endDate);
+          endDate.setHours(0, 0, 0, 0);
+          return today <= endDate;
+        }
+        return true;
+      })
       .sort((a, b) => a.dday - b.dday);
   };
 
@@ -119,6 +134,7 @@ export default function AnniversariesView() {
       day: '1',
       year: new Date().getFullYear().toString(),
       calendarType: 'solar',
+      endDate: '',
     });
     setEditingId(null);
   };
@@ -158,6 +174,7 @@ export default function AnniversariesView() {
             originMonth: month,
             originDay: day,
             calendarType: formData.calendarType,
+            endDate: formData.endDate || undefined,
           };
         }
       } else {
@@ -170,6 +187,7 @@ export default function AnniversariesView() {
           originMonth: month,
           originDay: day,
           calendarType: formData.calendarType,
+          endDate: formData.endDate || undefined,
         });
       }
 
@@ -195,6 +213,7 @@ export default function AnniversariesView() {
       day: ann.originDay.toString(),
       year: ann.originYear.toString(),
       calendarType: ann.calendarType,
+      endDate: ann.endDate || '',
     });
     setEditingId(ann.id);
     setShowForm(true);
@@ -404,6 +423,22 @@ export default function AnniversariesView() {
                   <span className="text-gray-900 dark:text-gray-300">음력 🌙</span>
                 </label>
               </div>
+            </div>
+
+            {/* End Date */}
+            <div>
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-1">
+                언제까지 표시 (선택사항)
+              </label>
+              <input
+                type="date"
+                value={formData.endDate}
+                onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 dark:focus:ring-gray-300"
+              />
+              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                이 날짜 이후로는 기념일이 표시되지 않습니다.
+              </p>
             </div>
 
             {/* Buttons */}
