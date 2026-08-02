@@ -58,29 +58,54 @@ export default function AnniversariesView() {
     fetchData();
   }, []);
 
-  const fetchData = async () => {
+  const calculateSummary = (anns: Anniversary[]): SummaryAnniversary[] => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const thirtyDaysLater = new Date(today);
+    thirtyDaysLater.setDate(thirtyDaysLater.getDate() + 30);
+
+    return anns
+      .map((ann) => {
+        const currentYear = today.getFullYear();
+        let targetMonth = ann.originMonth;
+        let targetDay = ann.originDay;
+        let targetYear = ann.originYear;
+
+        // 음력인 경우 양력으로 변환 (간단한 근사)
+        if (ann.calendarType === 'lunar') {
+          targetMonth = targetMonth + 1;
+          if (targetMonth > 12) targetMonth = 1;
+        }
+
+        const targetDate = new Date(currentYear, targetMonth - 1, targetDay);
+        const dday = Math.floor((targetDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        const age = currentYear - ann.originYear;
+
+        return {
+          id: ann.id,
+          title: ann.title,
+          category: ann.category,
+          date: targetDate.toISOString().split('T')[0],
+          year: currentYear,
+          dday,
+          age,
+          originYear: ann.originYear,
+        };
+      })
+      .filter((s) => s.dday >= -365 && s.dday <= 30)
+      .sort((a, b) => a.dday - b.dday);
+  };
+
+  const fetchData = () => {
     setLoading(true);
     setError('');
     try {
-      const userId = localStorage.getItem('userId') || 'demo-user';
-
-      const annResponse = await fetch('/api/anniversaries', {
-        headers: { 'x-user-id': userId },
-      });
-      if (annResponse.ok) {
-        setAnniversaries(await annResponse.json());
-      }
-
-      const sumResponse = await fetch('/api/anniversaries/summary?days=30', {
-        headers: { 'x-user-id': userId },
-      });
-      if (sumResponse.ok) {
-        const data = await sumResponse.json();
-        setSummary(data.upcoming || []);
-      }
+      const saved = localStorage.getItem('anniversaries_data');
+      const anns: Anniversary[] = saved ? JSON.parse(saved) : [];
+      setAnniversaries(anns);
+      setSummary(calculateSummary(anns));
     } catch (err) {
-      setError('데이터를 불러올 수 없습니다');
-      console.error(err);
+      console.error('데이터 로드 오류:', err);
     } finally {
       setLoading(false);
     }
@@ -118,37 +143,44 @@ export default function AnniversariesView() {
         return;
       }
 
-      const userId = localStorage.getItem('userId') || 'demo-user';
-      const response = await fetch(
-        editingId ? `/api/anniversaries/${editingId}` : '/api/anniversaries',
-        {
-          method: editingId ? 'PUT' : 'POST',
-          headers: {
-            'x-user-id': userId,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+      const saved = localStorage.getItem('anniversaries_data');
+      const anns: Anniversary[] = saved ? JSON.parse(saved) : [];
+
+      if (editingId) {
+        // 수정
+        const index = anns.findIndex((a) => a.id === editingId);
+        if (index !== -1) {
+          anns[index] = {
+            ...anns[index],
             title: formData.title,
             category: formData.category,
             originYear: year,
             originMonth: month,
             originDay: day,
             calendarType: formData.calendarType,
-          }),
+          };
         }
-      );
-
-      if (response.ok) {
-        setSuccess(editingId ? '기념일이 수정되었습니다! ✏️' : '기념일이 추가되었습니다! 🎉');
-        resetForm();
-        setShowForm(false);
-        setTimeout(() => {
-          fetchData();
-          setSuccess('');
-        }, 1500);
       } else {
-        setError(editingId ? '기념일 수정에 실패했습니다' : '기념일 추가에 실패했습니다');
+        // 추가
+        anns.push({
+          id: Date.now().toString(),
+          title: formData.title,
+          category: formData.category,
+          originYear: year,
+          originMonth: month,
+          originDay: day,
+          calendarType: formData.calendarType,
+        });
       }
+
+      localStorage.setItem('anniversaries_data', JSON.stringify(anns));
+      setSuccess(editingId ? '기념일이 수정되었습니다! ✏️' : '기념일이 추가되었습니다! 🎉');
+      resetForm();
+      setShowForm(false);
+      setTimeout(() => {
+        fetchData();
+        setSuccess('');
+      }, 1500);
     } catch (err) {
       setError('오류가 발생했습니다');
       console.error(err);
@@ -170,24 +202,19 @@ export default function AnniversariesView() {
     setSuccess('');
   };
 
-  const handleDeleteAnniversary = async (id: string) => {
+  const handleDeleteAnniversary = (id: string) => {
     try {
-      const userId = localStorage.getItem('userId') || 'demo-user';
-      const response = await fetch(`/api/anniversaries/${id}`, {
-        method: 'DELETE',
-        headers: { 'x-user-id': userId },
-      });
+      const saved = localStorage.getItem('anniversaries_data');
+      const anns: Anniversary[] = saved ? JSON.parse(saved) : [];
+      const filtered = anns.filter((a) => a.id !== id);
+      localStorage.setItem('anniversaries_data', JSON.stringify(filtered));
 
-      if (response.ok) {
-        setSuccess('기념일이 삭제되었습니다');
-        setDeleteConfirm(null);
-        setTimeout(() => {
-          fetchData();
-          setSuccess('');
-        }, 1000);
-      } else {
-        setError('삭제에 실패했습니다');
-      }
+      setSuccess('기념일이 삭제되었습니다');
+      setDeleteConfirm(null);
+      setTimeout(() => {
+        fetchData();
+        setSuccess('');
+      }, 1000);
     } catch (err) {
       setError('삭제 중 오류가 발생했습니다');
       console.error(err);
