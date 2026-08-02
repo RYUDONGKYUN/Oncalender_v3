@@ -1,0 +1,163 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportHeight="108"
+    android:viewportWidth="108">
+
+    <!-- Calendar card background -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M22,20 L86,20 Q94,20 94,28 L94,100 Q94,108 86,108 L22,108 Q14,108 14,100 L14,28 Q14,20 22,20 Z"
+        android:strokeColor="#1a1a1a"
+        android:strokeWidth="1" />
+
+    <!-- Header (dark background) -->
+    <path
+        android:fillColor="#1a1a1a"
+        android:pathData="M22,20 L86,20 Q94,20 94,28 L94,38 L14,38 L14,28 Q14,20 22,20 Z" />
+
+    <!-- Grid dots - Row 1 -->
+    <circle
+        android:cx="26"
+        android:cy="48"
+        android:r="2.2"
+        android:fillColor="#1a1a1a" />
+    <circle
+        android:cx="38"
+        android:cy="48"
+        android:r="2.2"
+        android:fillColor="#1a1a1a" />
+    <circle
+        android:cx="50"
+        android:cy="48"
+        android:r="2.2"
+        android:fillColor="#1a1a1a" />
+    <circle
+        android:cx="62"
+        android:cy="48"
+        android:r="2.2"
+        android:fillColor="#1a1a1a" />
+    <circle
+        android:cx="74"
+        android:cy="48"
+        android:r="2.2"
+        android:fillColor="#1a1a1a" />
+    <circle
+        android:cx="86"
+        android:cy="48"
+        android:r="2.2"
+        android:fillColor="#1a1a1a" />
+
+    <!-- Grid dots - Row 2 (with blue highlight on first) -->
+    <circle
+        android:cx="26"
+        android:cy="60"
+        android:r="2.2"
+        android:fillColor="#4589FF" />
+    <circle
+        android:cx="38"
+        android:cy="60"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="50"
+        android:cy="60"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="62"
+        android:cy="60"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="74"
+        android:cy="60"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="86"
+        android:cy="60"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+
+    <!-- Grid dots - Row 3 -->
+    <circle
+        android:cx="26"
+        android:cy="72"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="38"
+        android:cy="72"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="50"
+        android:cy="72"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="62"
+        android:cy="72"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="74"
+        android:cy="72"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="86"
+        android:cy="72"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+
+    <!-- Grid dots - Row 4 -->
+    <circle
+        android:cx="26"
+        android:cy="84"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="38"
+        android:cy="84"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="50"
+        android:cy="84"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="62"
+        android:cy="84"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="74"
+        android:cy="84"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+    <circle
+        android:cx="86"
+        android:cy="84"
+        android:r="2.2"
+        android:fillColor="#1a1a1a"
+        android:alpha="0.3" />
+</vector>
