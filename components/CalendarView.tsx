@@ -98,8 +98,24 @@ export default function CalendarView() {
       </div>
 
       {/* Calendar views */}
-      {viewType === 'month' && <MonthView currentDate={currentDate} />}
-      {viewType === 'week' && <WeekView currentDate={currentDate} />}
+      {viewType === 'month' && (
+        <MonthView
+          currentDate={currentDate}
+          onDateClick={(date) => {
+            setCurrentDate(date);
+            setViewType('day');
+          }}
+        />
+      )}
+      {viewType === 'week' && (
+        <WeekView
+          currentDate={currentDate}
+          onDateClick={(date) => {
+            setCurrentDate(date);
+            setViewType('day');
+          }}
+        />
+      )}
       {viewType === 'day' && <DayView currentDate={currentDate} />}
     </div>
   );

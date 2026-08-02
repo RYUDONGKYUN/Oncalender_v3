@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 
 interface MonthViewProps {
   currentDate: Date;
+  onDateClick?: (date: Date) => void;
 }
 
-export default function MonthView({ currentDate }: MonthViewProps) {
+export default function MonthView({ currentDate, onDateClick }: MonthViewProps) {
   const [events, setEvents] = useState<any[]>([]);
 
   useEffect(() => {
@@ -88,9 +89,10 @@ export default function MonthView({ currentDate }: MonthViewProps) {
             return (
               <div
                 key={idx}
-                className={`min-h-24 p-2 border border-slate-200 dark:border-slate-700 ${
+                onClick={() => day && onDateClick?.(day)}
+                className={`min-h-24 p-2 border border-slate-200 dark:border-slate-700 transition-colors ${
                   isToday ? 'bg-gray-50 dark:bg-gray-800' : 'bg-white dark:bg-slate-800'
-                }`}
+                } ${day ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700' : ''}`}
               >
                 {day && (
                   <>

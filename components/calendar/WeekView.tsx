@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 
 interface WeekViewProps {
   currentDate: Date;
+  onDateClick?: (date: Date) => void;
 }
 
-export default function WeekView({ currentDate }: WeekViewProps) {
+export default function WeekView({ currentDate, onDateClick }: WeekViewProps) {
   const [events, setEvents] = useState<any[]>([]);
 
   const startOfWeek = new Date(currentDate);
@@ -65,8 +66,9 @@ export default function WeekView({ currentDate }: WeekViewProps) {
             return (
               <div
                 key={idx}
-                className={`p-3 text-center border-r border-slate-200 dark:border-slate-700 last:border-r-0 ${
-                  isToday ? 'bg-gray-50 dark:bg-gray-800' : ''
+                onClick={() => onDateClick?.(day)}
+                className={`p-3 text-center border-r border-slate-200 dark:border-slate-700 last:border-r-0 cursor-pointer transition-colors ${
+                  isToday ? 'bg-gray-50 dark:bg-gray-800' : 'hover:bg-gray-50 dark:hover:bg-gray-800'
                 }`}
               >
                 <div className="text-xs text-slate-600 dark:text-slate-400 font-medium">
