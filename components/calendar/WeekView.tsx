@@ -20,20 +20,44 @@ export default function WeekView({ currentDate, onDateClick }: WeekViewProps) {
     fetchEvents();
   }, [currentDate]);
 
-  const fetchEvents = async () => {
+  const fetchEvents = () => {
     try {
-      const userId = localStorage.getItem('userId') || 'demo-user';
-      const response = await fetch(
-        `/api/events?start=${startOfWeek.toISOString()}&end=${endOfWeek.toISOString()}`,
-        {
-          headers: { 'x-user-id': userId },
-        }
-      );
-      if (response.ok) {
-        setEvents(await response.json());
-      }
+      // localStorage에서 기념일 가져오기
+      const saved = localStorage.getItem('anniversaries_data');
+      const anniversaries = saved ? JSON.parse(saved) : [];
+
+      // 현재 주의 기념일만 필터링
+      const weekEvents = anniversaries
+        .map((ann: any) => {
+          const currentYear = new Date().getFullYear();
+          let month = ann.originMonth;
+          let day = ann.originDay;
+
+          // 음력인 경우 양력으로 근사 변환
+          if (ann.calendarType === 'lunar') {
+            month = month + 1;
+            if (month > 12) month = 1;
+          }
+
+          const eventDate = new Date(currentYear, month - 1, day);
+          eventDate.setHours(0, 0, 0, 0); // 00:00에 설정
+
+          return {
+            id: ann.id,
+            title: ann.title,
+            startAt: eventDate.toISOString(),
+            category: ann.category,
+          };
+        })
+        .filter((event: any) => {
+          const eventDate = new Date(event.startAt);
+          return eventDate >= startOfWeek && eventDate <= endOfWeek;
+        });
+
+      setEvents(weekEvents);
     } catch (error) {
       console.error('Failed to fetch events:', error);
+      setEvents([]);
     }
   };
 
