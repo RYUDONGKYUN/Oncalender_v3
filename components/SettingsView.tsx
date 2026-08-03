@@ -90,20 +90,6 @@ export default function SettingsView() {
         </div>
       </div>
 
-      {/* Display settings */}
-      <div className="space-y-3">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white">🎨 표시</h2>
-        <div className="bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-slate-700 dark:text-slate-300">다크 모드</span>
-            <select className="px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white">
-              <option>자동</option>
-              <option>켜기</option>
-              <option>끄기</option>
-            </select>
-          </div>
-        </div>
-      </div>
 
       {/* About */}
       <div className="space-y-3">

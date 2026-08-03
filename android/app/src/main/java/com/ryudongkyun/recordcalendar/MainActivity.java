@@ -1,4 +1,4 @@
-package com.ryudongkyun.oncalender;
+package com.ryudongkyun.recordcalendar;
 
 import com.getcapacitor.BridgeActivity;
 
