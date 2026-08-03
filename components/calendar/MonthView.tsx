@@ -14,24 +14,43 @@ export default function MonthView({ currentDate, onDateClick }: MonthViewProps) 
     fetchEvents();
   }, [currentDate]);
 
-  const fetchEvents = async () => {
+  const fetchEvents = () => {
     try {
-      const start = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      const end = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-      end.setHours(23, 59, 59, 999);
+      // localStorage에서 기념일 가져오기
+      const saved = localStorage.getItem('anniversaries_data');
+      const anniversaries = saved ? JSON.parse(saved) : [];
 
-      const userId = localStorage.getItem('userId') || 'demo-user';
-      const response = await fetch(
-        `/api/events?start=${start.toISOString()}&end=${end.toISOString()}`,
-        {
-          headers: { 'x-user-id': userId },
-        }
-      );
-      if (response.ok) {
-        setEvents(await response.json());
-      }
+      // 현재 월의 기념일만 필터링
+      const monthEvents = anniversaries
+        .map((ann: any) => {
+          const currentYear = new Date().getFullYear();
+          let month = ann.originMonth;
+          let day = ann.originDay;
+
+          // 음력인 경우 양력으로 근사 변환
+          if (ann.calendarType === 'lunar') {
+            month = month + 1;
+            if (month > 12) month = 1;
+          }
+
+          const eventDate = new Date(currentYear, month - 1, day);
+          return {
+            id: ann.id,
+            title: ann.title,
+            startAt: eventDate.toISOString(),
+            category: ann.category,
+          };
+        })
+        .filter((event: any) => {
+          const eventDate = new Date(event.startAt);
+          return eventDate.getMonth() === currentDate.getMonth() &&
+                 eventDate.getFullYear() === currentDate.getFullYear();
+        });
+
+      setEvents(monthEvents);
     } catch (error) {
       console.error('Failed to fetch events:', error);
+      setEvents([]);
     }
   };
 
