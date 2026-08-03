@@ -47,8 +47,8 @@ export default function CalendarView() {
           onClick={() => setViewType('month')}
           className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
             viewType === 'month'
-              ? 'bg-black dark:bg-white text-white dark:text-black'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
+              ? 'bg-orange-500 dark:bg-orange-500 text-white dark:text-white'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-orange-100 dark:hover:bg-orange-900'
           }`}
         >
           월
@@ -57,8 +57,8 @@ export default function CalendarView() {
           onClick={() => setViewType('week')}
           className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
             viewType === 'week'
-              ? 'bg-black dark:bg-white text-white dark:text-black'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
+              ? 'bg-orange-500 dark:bg-orange-500 text-white dark:text-white'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-orange-100 dark:hover:bg-orange-900'
           }`}
         >
           주
@@ -67,8 +67,8 @@ export default function CalendarView() {
           onClick={() => setViewType('day')}
           className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
             viewType === 'day'
-              ? 'bg-black dark:bg-white text-white dark:text-black'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
+              ? 'bg-orange-500 dark:bg-orange-500 text-white dark:text-white'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-orange-100 dark:hover:bg-orange-900'
           }`}
         >
           일
@@ -85,7 +85,7 @@ export default function CalendarView() {
         </button>
         <button
           onClick={handleToday}
-          className="px-3 py-2 bg-black dark:bg-white text-white dark:text-black rounded text-sm font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors"
+          className="px-3 py-2 bg-orange-500 dark:bg-orange-500 text-white dark:text-white rounded text-sm font-medium hover:bg-orange-600 dark:hover:bg-orange-600 transition-colors"
         >
           오늘
         </button>

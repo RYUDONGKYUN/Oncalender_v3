@@ -39,7 +39,7 @@ export default function ConnectedView() {
             <button
               onClick={handleConnect}
               disabled={loading}
-              className="w-full py-3 bg-blue-500 hover:bg-blue-600 disabled:bg-slate-400 text-white rounded-lg font-medium transition-colors"
+              className="w-full py-3 bg-orange-500 hover:bg-orange-600 disabled:bg-slate-400 text-white rounded-lg font-medium transition-colors"
             >
               {loading ? '연결 중...' : 'Google로 연결'}
             </button>
@@ -89,7 +89,7 @@ export default function ConnectedView() {
       </div>
 
       {/* Info */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 text-sm text-blue-700 dark:text-blue-300">
+      <div className="bg-orange-50 dark:bg-blue-900/20 border border-orange-200 dark:border-blue-800 rounded-lg p-4 text-sm text-orange-700 dark:text-orange-300">
         <p className="font-semibold mb-2">📌 Google Calendar API v3</p>
         <p>
           Google Calendar 연동은 Google Calendar API v3를 통해 안전하게 처리됩니다.

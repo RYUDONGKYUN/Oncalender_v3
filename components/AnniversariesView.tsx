@@ -351,7 +351,7 @@ export default function AnniversariesView() {
             resetForm();
             setShowForm(true);
           }}
-          className="w-full bg-black hover:bg-gray-900 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-black font-semibold py-3 px-4 rounded-lg shadow-lg transition-all active:scale-95"
+          className="w-full bg-orange-500 hover:bg-orange-600 dark:bg-orange-500 dark:hover:bg-orange-600 text-white dark:text-white font-semibold py-3 px-4 rounded-lg shadow-lg transition-all active:scale-95"
         >
           ➕ 기념일 추가하기
         </button>
@@ -374,7 +374,7 @@ export default function AnniversariesView() {
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="예: 엄마 생신"
-                className="w-full px-3 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-700 dark:focus:ring-gray-300"
+                className="w-full px-3 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400"
               />
             </div>
 
@@ -391,7 +391,7 @@ export default function AnniversariesView() {
                     onClick={() => setFormData({ ...formData, category: cat })}
                     className={`py-2 px-3 rounded-lg font-medium text-sm transition-all ${
                       formData.category === cat
-                        ? 'bg-black dark:bg-white text-white dark:text-black ring-2 ring-offset-2 dark:ring-offset-gray-900'
+                        ? 'bg-orange-500 dark:bg-orange-500 text-white dark:text-white ring-2 ring-offset-2 dark:ring-offset-gray-900'
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
                     }`}
                   >
@@ -410,7 +410,7 @@ export default function AnniversariesView() {
                 <select
                   value={formData.month}
                   onChange={(e) => setFormData({ ...formData, month: e.target.value })}
-                  className="w-full px-2 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 dark:focus:ring-gray-300"
+                  className="w-full px-2 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400"
                 >
                   {[...Array(12)].map((_, i) => (
                     <option key={i + 1} value={i + 1}>
@@ -426,7 +426,7 @@ export default function AnniversariesView() {
                 <select
                   value={formData.day}
                   onChange={(e) => setFormData({ ...formData, day: e.target.value })}
-                  className="w-full px-2 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 dark:focus:ring-gray-300"
+                  className="w-full px-2 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400"
                 >
                   {[...Array(31)].map((_, i) => (
                     <option key={i + 1} value={i + 1}>
@@ -445,7 +445,7 @@ export default function AnniversariesView() {
                   onChange={(e) => setFormData({ ...formData, year: e.target.value })}
                   min="1900"
                   max="2024"
-                  className="w-full px-2 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 dark:focus:ring-gray-300"
+                  className="w-full px-2 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400"
                 />
               </div>
             </div>
@@ -510,7 +510,7 @@ export default function AnniversariesView() {
                   setFormData({ ...formData, endDate: e.target.value, useMaxDate: false })
                 }
                 disabled={formData.useMaxDate}
-                className="w-full px-3 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-700 dark:focus:ring-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-3 py-2 border border-gray-400 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                 이 날짜 이후로는 기념일이 표시되지 않습니다.
@@ -521,7 +521,7 @@ export default function AnniversariesView() {
             <div className="flex gap-2 pt-4">
               <button
                 type="submit"
-                className="flex-1 bg-black hover:bg-gray-900 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-black font-semibold py-2 px-4 rounded-lg transition-colors active:scale-95"
+                className="flex-1 bg-orange-500 hover:bg-orange-600 dark:bg-orange-500 dark:hover:bg-orange-600 text-white dark:text-white font-semibold py-2 px-4 rounded-lg transition-colors active:scale-95"
               >
                 {editingId ? '수정' : '추가'}
               </button>
@@ -531,7 +531,7 @@ export default function AnniversariesView() {
                   setShowForm(false);
                   resetForm();
                 }}
-                className="flex-1 bg-gray-400 dark:bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors active:scale-95"
+                className="flex-1 bg-gray-400 dark:bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors active:scale-95"
               >
                 취소
               </button>
@@ -681,7 +681,7 @@ export default function AnniversariesView() {
               </button>
               <button
                 onClick={() => handleDeleteAnniversary(deleteConfirm.id)}
-                className="flex-1 bg-black hover:bg-gray-900 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-black font-semibold py-2 px-4 rounded-lg transition-colors active:scale-95"
+                className="flex-1 bg-orange-500 hover:bg-orange-600 dark:bg-orange-500 dark:hover:bg-orange-600 text-white dark:text-white font-semibold py-2 px-4 rounded-lg transition-colors active:scale-95"
               >
                 삭제
               </button>

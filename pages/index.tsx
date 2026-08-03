@@ -43,8 +43,8 @@ export default function Home() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-1 py-4 px-2 text-sm font-medium transition-colors border-t-2 ${
                   activeTab === tab.id
-                    ? 'border-black dark:border-white text-black dark:text-white'
-                    : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300'
+                    ? 'border-orange-500 dark:border-orange-400 text-orange-600 dark:text-orange-400'
+                    : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400'
                 }`}
               >
                 <div className="text-xl">{tab.label}</div>

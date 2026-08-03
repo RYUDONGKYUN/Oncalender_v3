@@ -3,6 +3,12 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Record Calendar Theme */
+  --primary: #FF9800;
+  --primary-light: #FFE0B2;
+  --primary-dark: #F57C00;
+  --primary-darker: #E65100;
 }
 
 @theme inline {
