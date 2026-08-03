@@ -37,8 +37,8 @@ export default function SettingsView() {
             onClick={handleSave}
             className={`w-full py-2 px-4 rounded-lg font-medium transition-colors ${
               saved
-                ? 'bg-green-500 text-white'
-                : 'bg-blue-500 hover:bg-blue-600 text-white'
+                ? 'bg-orange-600 text-white'
+                : 'bg-orange-500 hover:bg-orange-600 text-white'
             }`}
           >
             {saved ? '✓ 저장됨' : '저장'}

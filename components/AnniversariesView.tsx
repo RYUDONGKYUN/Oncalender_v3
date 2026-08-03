@@ -322,12 +322,12 @@ export default function AnniversariesView() {
     <div className="p-4 pb-32 space-y-6 bg-white dark:bg-black min-h-screen">
       {/* Error/Success Messages */}
       {error && (
-        <div className="bg-red-50 dark:bg-red-950 text-red-900 dark:text-red-200 p-4 rounded-lg border border-red-300 dark:border-red-700">
+        <div className="bg-orange-50 dark:bg-orange-950 text-orange-900 dark:text-orange-200 p-4 rounded-lg border border-orange-300 dark:border-orange-700">
           ⚠️ {error}
         </div>
       )}
       {success && (
-        <div className="bg-green-50 dark:bg-green-950 text-green-900 dark:text-green-200 p-4 rounded-lg border border-green-300 dark:border-green-700">
+        <div className="bg-orange-50 dark:bg-orange-950 text-orange-900 dark:text-orange-200 p-4 rounded-lg border border-orange-300 dark:border-orange-700">
           ✓ {success}
         </div>
       )}

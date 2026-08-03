@@ -24,7 +24,7 @@ export default function ConnectedView() {
           <h2 className="text-lg font-bold text-slate-900 dark:text-white">Google Calendar</h2>
           <div className={`px-3 py-1 rounded-full text-sm font-medium ${
             isConnected
-              ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100'
+              ? 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-100'
               : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-100'
           }`}>
             {isConnected ? '연결됨' : '미연결'}
