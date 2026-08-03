@@ -1,6 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import {
+  sanitizeTitle,
+  validateCategory,
+  validateYear,
+  validateDateRange,
+  getSafeErrorMessage,
+  migrateLocalStorageData,
+  safeJsonParse,
+  SecurityConfig,
+} from '../lib/security';
 
 interface Anniversary {
   id: string;
@@ -117,11 +127,13 @@ export default function AnniversariesView() {
     setError('');
     try {
       const saved = localStorage.getItem('anniversaries_data');
-      const anns: Anniversary[] = saved ? JSON.parse(saved) : [];
+      const rawData = safeJsonParse<any[]>(saved, []);
+      const anns: Anniversary[] = migrateLocalStorageData(rawData);
       setAnniversaries(anns);
       setSummary(calculateSummary(anns));
     } catch (err) {
-      console.error('데이터 로드 오류:', err);
+      setError('데이터를 불러오는 중 오류가 발생했습니다.');
+      console.error('데이터 로드 오류 (개발용):', process.env.NODE_ENV === 'development' ? err : 'hidden');
     } finally {
       setLoading(false);
     }
@@ -147,24 +159,42 @@ export default function AnniversariesView() {
     setSuccess('');
 
     try {
-      if (!formData.title.trim()) {
+      // 입력값 검증
+      const sanitizedTitle = sanitizeTitle(formData.title);
+      if (!sanitizedTitle) {
         setError('제목을 입력해주세요');
         return;
       }
 
-      const month = parseInt(formData.month);
-      const day = parseInt(formData.day);
-      const year = parseInt(formData.year);
+      if (!validateCategory(formData.category, CATEGORIES)) {
+        setError('올바른 카테고리를 선택해주세요');
+        return;
+      }
+
+      const month = parseInt(formData.month, 10);
+      const day = parseInt(formData.day, 10);
+      const year = parseInt(formData.year, 10);
+
+      if (!validateYear(year)) {
+        setError(`연도는 ${SecurityConfig.MIN_YEAR}~${SecurityConfig.MAX_YEAR} 사이여야 합니다`);
+        return;
+      }
 
       if (!isValidDate(month, day, year)) {
         setError('올바른 날짜를 입력해주세요 (예: 2월 30일은 불가능)');
         return;
       }
 
-      const saved = localStorage.getItem('anniversaries_data');
-      const anns: Anniversary[] = saved ? JSON.parse(saved) : [];
-
+      // 종료 날짜 범위 검증
       const finalEndDate = formData.useMaxDate ? '2100-12-31' : formData.endDate || undefined;
+      if (!validateDateRange(formData.endDate, finalEndDate)) {
+        setError('시작 날짜가 종료 날짜보다 클 수 없습니다');
+        return;
+      }
+
+      const saved = localStorage.getItem('anniversaries_data');
+      const rawData = safeJsonParse<any[]>(saved, []);
+      const anns: Anniversary[] = migrateLocalStorageData(rawData);
 
       if (editingId) {
         // 수정
@@ -172,7 +202,7 @@ export default function AnniversariesView() {
         if (index !== -1) {
           anns[index] = {
             ...anns[index],
-            title: formData.title,
+            title: sanitizedTitle,
             category: formData.category,
             originYear: year,
             originMonth: month,
@@ -185,7 +215,7 @@ export default function AnniversariesView() {
         // 추가
         anns.push({
           id: Date.now().toString(),
-          title: formData.title,
+          title: sanitizedTitle,
           category: formData.category,
           originYear: year,
           originMonth: month,
@@ -204,8 +234,11 @@ export default function AnniversariesView() {
         setSuccess('');
       }, 1500);
     } catch (err) {
-      setError('오류가 발생했습니다');
-      console.error(err);
+      const safeMessage = getSafeErrorMessage(err);
+      setError(safeMessage);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Add anniversary error (개발용):', err);
+      }
     }
   };
 
@@ -229,9 +262,23 @@ export default function AnniversariesView() {
 
   const handleDeleteAnniversary = (id: string) => {
     try {
+      // ID 유효성 검증
+      if (!id || typeof id !== 'string') {
+        setError('유효하지 않은 기념일입니다');
+        return;
+      }
+
       const saved = localStorage.getItem('anniversaries_data');
-      const anns: Anniversary[] = saved ? JSON.parse(saved) : [];
+      const rawData = safeJsonParse<any[]>(saved, []);
+      const anns: Anniversary[] = migrateLocalStorageData(rawData);
       const filtered = anns.filter((a) => a.id !== id);
+
+      // 삭제되지 않은 경우
+      if (filtered.length === anns.length) {
+        setError('삭제할 기념일을 찾을 수 없습니다');
+        return;
+      }
+
       localStorage.setItem('anniversaries_data', JSON.stringify(filtered));
 
       setSuccess('기념일이 삭제되었습니다');
@@ -241,8 +288,11 @@ export default function AnniversariesView() {
         setSuccess('');
       }, 1000);
     } catch (err) {
-      setError('삭제 중 오류가 발생했습니다');
-      console.error(err);
+      const safeMessage = getSafeErrorMessage(err);
+      setError(safeMessage);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Delete anniversary error (개발용):', err);
+      }
     }
   };
 
