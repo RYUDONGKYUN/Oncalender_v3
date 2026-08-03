@@ -22,7 +22,7 @@ export default function Home() {
     <div className="min-h-screen bg-white dark:bg-black">
       <header className="sticky top-0 z-40 border-b border-gray-300 dark:border-gray-700 bg-white/80 dark:bg-black/80 backdrop-blur-sm">
         <div className="max-w-md mx-auto px-4 py-4">
-          <h1 className="text-2xl font-bold text-black dark:text-white">OnCalendar</h1>
+          <h1 className="text-2xl font-bold text-black dark:text-white">Record Calendar</h1>
           <p className="text-sm text-gray-600 dark:text-gray-400">양력·음력 기념일 관리</p>
         </div>
       </header>

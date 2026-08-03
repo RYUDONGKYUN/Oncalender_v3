@@ -1,4 +1,4 @@
-# OnCalendar v3
+# Record Calendar v3
 
 양력·음력 반복 기념일을 2100년까지 자동으로 관리하는 네이티브 Android 앱
 
