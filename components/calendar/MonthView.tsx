@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { getAnniversariesFromStorage, convertAnniversariesToEvents, indexEventsByDate, WEEKDAY_LABELS, CalendarEvent } from '@/lib/eventUtils';
 
 interface MonthViewProps {
   currentDate: Date;
@@ -8,51 +9,17 @@ interface MonthViewProps {
 }
 
 export default function MonthView({ currentDate, onDateClick }: MonthViewProps) {
-  const [events, setEvents] = useState<any[]>([]);
+  const [eventsByDate, setEventsByDate] = useState<Map<string, CalendarEvent[]>>(new Map());
 
   useEffect(() => {
-    fetchEvents();
+    const anniversaries = getAnniversariesFromStorage();
+    const events = convertAnniversariesToEvents(
+      anniversaries,
+      currentDate.getMonth(),
+      currentDate.getFullYear()
+    );
+    setEventsByDate(indexEventsByDate(events));
   }, [currentDate]);
-
-  const fetchEvents = () => {
-    try {
-      // localStorage에서 기념일 가져오기
-      const saved = localStorage.getItem('anniversaries_data');
-      const anniversaries = saved ? JSON.parse(saved) : [];
-
-      // 현재 월의 기념일만 필터링
-      const monthEvents = anniversaries
-        .map((ann: any) => {
-          const currentYear = new Date().getFullYear();
-          let month = ann.originMonth;
-          let day = ann.originDay;
-
-          // 음력인 경우 양력으로 근사 변환
-          if (ann.calendarType === 'lunar') {
-            month = month + 1;
-            if (month > 12) month = 1;
-          }
-
-          const eventDate = new Date(currentYear, month - 1, day);
-          return {
-            id: ann.id,
-            title: ann.title,
-            startAt: eventDate.toISOString(),
-            category: ann.category,
-          };
-        })
-        .filter((event: any) => {
-          const eventDate = new Date(event.startAt);
-          return eventDate.getMonth() === currentDate.getMonth() &&
-                 eventDate.getFullYear() === currentDate.getFullYear();
-        });
-
-      setEvents(monthEvents);
-    } catch (error) {
-      console.error('Failed to fetch events:', error);
-      setEvents([]);
-    }
-  };
 
   const getDaysInMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -63,10 +30,7 @@ export default function MonthView({ currentDate, onDateClick }: MonthViewProps) 
   };
 
   const getEventsForDate = (date: Date) => {
-    return events.filter((event) => {
-      const eventDate = new Date(event.startAt);
-      return eventDate.toDateString() === date.toDateString();
-    });
+    return eventsByDate.get(date.toDateString()) || [];
   };
 
   const daysInMonth = getDaysInMonth(currentDate);
@@ -81,8 +45,6 @@ export default function MonthView({ currentDate, onDateClick }: MonthViewProps) 
     days.push(new Date(currentDate.getFullYear(), currentDate.getMonth(), i));
   }
 
-  const weekDayLabels = ['일', '월', '화', '수', '목', '금', '토'];
-
   return (
     <div className="space-y-4">
       <div className="bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm">
@@ -93,7 +55,7 @@ export default function MonthView({ currentDate, onDateClick }: MonthViewProps) 
 
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden">
         <div className="grid grid-cols-7 border-b border-slate-200 dark:border-slate-700">
-          {weekDayLabels.map((label) => (
+          {WEEKDAY_LABELS.map((label) => (
             <div key={label} className="p-3 text-center bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-semibold text-sm">
               {label}
             </div>
@@ -122,7 +84,7 @@ export default function MonthView({ currentDate, onDateClick }: MonthViewProps) 
                     </div>
                     <div className="space-y-1">
                       {dayEvents.slice(0, 2).map((event) => (
-                        <div key={event.id} className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-1 rounded truncate">
+                        <div key={event.id} className="text-xs bg-orange-200 dark:bg-orange-900 text-orange-800 dark:text-orange-200 p-1 rounded truncate">
                           {event.title}
                         </div>
                       ))}

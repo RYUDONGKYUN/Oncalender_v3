@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import { getAnniversariesFromStorage, convertAnniversariesToEvents, indexEventsByDate, WEEKDAY_LABELS, CalendarEvent } from '@/lib/eventUtils';
 
 interface WeekViewProps {
   currentDate: Date;
@@ -8,71 +9,42 @@ interface WeekViewProps {
 }
 
 export default function WeekView({ currentDate, onDateClick }: WeekViewProps) {
-  const [events, setEvents] = useState<any[]>([]);
+  const [eventsByDate, setEventsByDate] = useState<Map<string, CalendarEvent[]>>(new Map());
 
-  const startOfWeek = new Date(currentDate);
-  startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
-
-  const endOfWeek = new Date(startOfWeek);
-  endOfWeek.setDate(startOfWeek.getDate() + 6);
-
-  useEffect(() => {
-    fetchEvents();
+  const startOfWeek = useMemo(() => {
+    const date = new Date(currentDate);
+    date.setDate(currentDate.getDate() - currentDate.getDay());
+    return date;
   }, [currentDate]);
 
-  const fetchEvents = () => {
-    try {
-      // localStorage에서 기념일 가져오기
-      const saved = localStorage.getItem('anniversaries_data');
-      const anniversaries = saved ? JSON.parse(saved) : [];
+  const endOfWeek = useMemo(() => {
+    const date = new Date(startOfWeek);
+    date.setDate(startOfWeek.getDate() + 6);
+    return date;
+  }, [startOfWeek]);
 
-      // 현재 주의 기념일만 필터링
-      const weekEvents = anniversaries
-        .map((ann: any) => {
-          const currentYear = new Date().getFullYear();
-          let month = ann.originMonth;
-          let day = ann.originDay;
+  useEffect(() => {
+    const anniversaries = getAnniversariesFromStorage();
+    const events = convertAnniversariesToEvents(anniversaries);
+    const weekEvents = events.filter((event) => {
+      const eventDate = new Date(event.startAt);
+      return eventDate >= startOfWeek && eventDate <= endOfWeek;
+    });
+    setEventsByDate(indexEventsByDate(weekEvents));
+  }, [startOfWeek, endOfWeek]);
 
-          // 음력인 경우 양력으로 근사 변환
-          if (ann.calendarType === 'lunar') {
-            month = month + 1;
-            if (month > 12) month = 1;
-          }
-
-          const eventDate = new Date(currentYear, month - 1, day);
-          eventDate.setHours(0, 0, 0, 0); // 00:00에 설정
-
-          return {
-            id: ann.id,
-            title: ann.title,
-            startAt: eventDate.toISOString(),
-            category: ann.category,
-          };
-        })
-        .filter((event: any) => {
-          const eventDate = new Date(event.startAt);
-          return eventDate >= startOfWeek && eventDate <= endOfWeek;
-        });
-
-      setEvents(weekEvents);
-    } catch (error) {
-      console.error('Failed to fetch events:', error);
-      setEvents([]);
+  const weekDays = useMemo(() => {
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(startOfWeek);
+      day.setDate(startOfWeek.getDate() + i);
+      days.push(day);
     }
-  };
-
-  const weekDays = [];
-  for (let i = 0; i < 7; i++) {
-    const day = new Date(startOfWeek);
-    day.setDate(startOfWeek.getDate() + i);
-    weekDays.push(day);
-  }
+    return days;
+  }, [startOfWeek]);
 
   const getEventsForDate = (date: Date) => {
-    return events.filter((event) => {
-      const eventDate = new Date(event.startAt);
-      return eventDate.toDateString() === date.toDateString();
-    });
+    return eventsByDate.get(date.toDateString()) || [];
   };
 
   return (
@@ -96,7 +68,7 @@ export default function WeekView({ currentDate, onDateClick }: WeekViewProps) {
                 }`}
               >
                 <div className="text-xs text-slate-600 dark:text-slate-400 font-medium">
-                  {['일', '월', '화', '수', '목', '금', '토'][day.getDay()]}
+                  {WEEKDAY_LABELS[day.getDay()]}
                 </div>
                 <div
                   className={`text-lg font-bold mt-1 ${
@@ -121,10 +93,10 @@ export default function WeekView({ currentDate, onDateClick }: WeekViewProps) {
                 {dayEvents.map((event) => (
                   <div
                     key={event.id}
-                    className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-2 rounded"
+                    className="text-xs bg-orange-200 dark:bg-orange-900 text-orange-800 dark:text-orange-200 p-2 rounded"
                   >
                     <div className="font-semibold truncate">{event.title}</div>
-                    <div className="text-xs opacity-75">
+                    <div className="text-xs opacity-75 mt-1">
                       {new Date(event.startAt).toLocaleTimeString('ko-KR', {
                         hour: '2-digit',
                         minute: '2-digit',
